@@ -22,13 +22,13 @@ int main(int argc, char* argv[]){
 	
 	if(argc<2){
 		printf("Use: %s <MBR FILE>\n", program_name);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	mbr = fopen(argv[1], "r");
 	if(mbr==NULL){
 		printf("Couldn't read file\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	/* Verificar assinatura */
@@ -50,7 +50,7 @@ int main(int argc, char* argv[]){
 	free(ent);
 
 	fclose(mbr);
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 size_t read_bytes(void *restrict output, long offset, size_t size, size_t nmemb){
