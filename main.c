@@ -15,6 +15,8 @@ typedef struct entry{
 }entry;
 
 size_t read_bytes(void *restrict output, long offset, size_t size, size_t nmemb);
+void   read_entry(struct entry * ent, char *disk, int id);
+
 
 int main(int argc, char* argv[]){
 	
@@ -38,6 +40,15 @@ int main(int argc, char* argv[]){
 	}
 	free(sig);
 
+	/* Verificar entradas */
+	int i;
+	struct entry *ent= (struct entry *)malloc(sizeof(entry));
+	for(i=0; i<4; i++){
+		read_bytes(ent, ((int)0x01be)+sizeof(entry)*i, sizeof(entry), 1);
+		read_entry(ent, argv[1], i+1);
+	}
+	free(ent);
+
 	fclose(mbr);
 	return 0;
 }
@@ -45,4 +56,14 @@ int main(int argc, char* argv[]){
 size_t read_bytes(void *restrict output, long offset, size_t size, size_t nmemb){
 	fseek(mbr, offset, SEEK_SET);
 	return fread(output, size, nmemb, mbr);
+}
+
+void   read_entry(struct entry * ent, char* disk, int id){
+	unsigned char * ns = ent->nsectors;
+	unsigned int nsectors = ns[3]<<24|ns[2]<<16|ns[1]<<8|ns[0];
+	if(nsectors!=0){
+		printf("%s%d ", disk, id);
+	
+		printf("\n");
+	}
 }
