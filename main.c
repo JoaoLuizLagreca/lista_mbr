@@ -38,7 +38,7 @@ int main(int argc, char* argv[]){
 	}
 	free(sig);
 
-	printf("Device: \n");
+	printf("Device: %s\n\n", argv[1]);
 
 	/* Verificar entradas */
 	int i;
