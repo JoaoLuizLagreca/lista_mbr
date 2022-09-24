@@ -36,6 +36,7 @@ int main(int argc, char* argv[]){
 		fprintf(stderr,"Error: No MBR signature was found!\n");
 		exit(EXIT_FAILURE);
 	}
+	free(sig);
 
 	fclose(mbr);
 	return 0;
