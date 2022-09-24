@@ -38,9 +38,11 @@ int main(int argc, char* argv[]){
 	}
 	free(sig);
 
+	printf("Device: \n");
+
 	/* Verificar entradas */
 	int i;
-	struct entry *ent= (struct entry *)malloc(sizeof(entry));
+	struct entry *ent= (struct entry *)malloc(sizeof(entry)+1);
 	for(i=0; i<4; i++){
 		read_bytes(ent, ((int)0x01be)+sizeof(entry)*i, sizeof(entry), 1);
 		read_entry(ent, argv[1], i+1);
@@ -54,6 +56,29 @@ int main(int argc, char* argv[]){
 size_t read_bytes(void *restrict output, long offset, size_t size, size_t nmemb){
 	fseek(mbr, offset, SEEK_SET);
 	return fread(output, size, nmemb, mbr);
+}
+
+char* get_type(unsigned char type){
+	switch(type){
+		case 0x00:
+			return "empty";
+		case 0x83:
+			return "linux";
+		case 0x82:
+			return "swap";
+		case 0x05:
+			return "extended";
+		case 0xef:
+			return "uefi";
+		case 0xfd:
+			return "raid";
+		case 0x8e:
+			return "lvm";
+		case 0x85:
+			return "linuxex";
+		default:
+			return "other/unknown";
+	}
 }
 
 void   read_entry(struct entry * ent, char* disk, int id){
@@ -83,5 +108,6 @@ void   read_entry(struct entry * ent, char* disk, int id){
 		printf("\n");
 
 		printf("	Id: %x\n", ent->type);
+		printf("	Type: %s\n", get_type(ent->type));
 	}
 }
