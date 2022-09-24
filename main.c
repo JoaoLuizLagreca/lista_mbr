@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const char* program_name = "foxdisk";
-
 FILE *mbr;
 typedef struct entry{
 	unsigned char status;
@@ -21,7 +19,7 @@ void   read_entry(struct entry * ent, char *disk, int id);
 int main(int argc, char* argv[]){
 	
 	if(argc<2){
-		printf("Use: %s <MBR FILE>\n", program_name);
+		printf("Use: %s <MBR FILE>\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
 
