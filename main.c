@@ -20,6 +20,13 @@ int main(int argc, char* argv[]){
 		exit(1);
 	}
 
+	/* Verificar assinatura */
+	unsigned char *sig = malloc(2);
+	read_bytes(sig, 0x01fe, 2, 1);
+	if((sig[0]<<8|sig[1])!=0x55aa){
+		fprintf(stderr,"Error: No MBR signature was found!\n");
+		exit(EXIT_FAILURE);
+	}
 
 	fclose(mbr);
 	return 0;
