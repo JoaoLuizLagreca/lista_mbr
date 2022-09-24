@@ -4,6 +4,15 @@
 const char* program_name = "foxdisk";
 
 FILE *mbr;
+typedef struct entry{
+	unsigned char status;
+	unsigned char first_abs[3];
+	unsigned char type;
+	unsigned char last_abs[3];
+	unsigned char lba[4];
+	unsigned char nsectors[4];
+	
+}entry;
 
 size_t read_bytes(void *restrict output, long offset, size_t size, size_t nmemb);
 
