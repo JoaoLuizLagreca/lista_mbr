@@ -60,8 +60,28 @@ void   read_entry(struct entry * ent, char* disk, int id){
 	unsigned char * ns = ent->nsectors;
 	unsigned int nsectors = ns[3]<<24|ns[2]<<16|ns[1]<<8|ns[0];
 	if(nsectors!=0){
-		printf("%s%d ", disk, id);
-	
+		printf("%s%d", disk, id);
+		if(ent->status==0x80)
+			printf(" (ACTIVE)");
 		printf("\n");
+
+		unsigned int start = ent->lba[3]<<24|ent->lba[2]<<16|ent->lba[1]<<8|ent->lba[0];
+		printf("	Start: %d\n", start);
+
+		unsigned int end = nsectors+start-0x01;
+		printf("	End: %d\n", end);
+		printf("	Sectors: %d\n", nsectors);
+
+		printf("	Size: ");
+		size_t size = nsectors/2;
+		if(size>=1048576)
+			printf("%dG", size/1048576);
+		else if(size>=1024)
+			printf("%dM", size/1024);
+		else
+			printf("%dk", size);
+		printf("\n");
+
+		printf("	Id: %x\n", ent->type);
 	}
 }
